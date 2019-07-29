@@ -1,0 +1,7 @@
+2400 0 1 0           
+18 Abaqus 2018 - 2601 14 ACIS 26.0.1 NT 24 Sat Jul 27 11:19:29 2019 
+1 9.9999999999999995e-07 1e-10 
+-0 body $1 -1 -1 $-1 $-1 $-1 $2 F #
+-1 string_attrib-name_attrib-gen-attrib $-1 -1 $-1 $-1 $0 2 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 @18 HKS_ATTRIB_BODY_ID @1 1 #
+-2 transform $-1 -1 1 0 0 0 1 0 0 0 1 0 0 0 1 no_rotate no_reflect no_shear #
+End-of-ACIS-data 
