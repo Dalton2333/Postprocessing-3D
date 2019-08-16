@@ -424,6 +424,10 @@ def get_nodes_coords_2d(boundary):
     return coords
 
 
+def export_obj(ap):
+    rep = {}
+    with open()
+
 def make_plots(ext_org=True, ext_spl=True, ext_spl_pac="kz", both_org=True, both_spl_void=True, both_spl_spl=True,
                lw=1):
 
@@ -607,11 +611,11 @@ if __name__ == '__main__':
             for idx in range(len(surf_nd_coords)):
                 f.write(str(surf_nd_coords[idx])+'\n')
             f.close()
+
+
+
         geometry.obj_processor.add_color(ap,surf_nd_coords)
         geometry.meshlab_processor.mesh_smoothing(ap)
-
-
-
     else:
         raise Exception("Model space not found, check ap['model_space']")
 
