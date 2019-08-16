@@ -237,6 +237,7 @@ class Part(object):
                 "Elements: " + str(self.elements) + "\n" +
                 "Nodes: " + str(self.nodes) + "\n")
 
+
 class Boundary(object):
     """ A boundary of the part.
     """

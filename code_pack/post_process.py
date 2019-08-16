@@ -7,6 +7,9 @@ import os
 import sys
 
 import geometry.boundary_extractor
+import geometry.surface_extractor
+import geometry.obj_processor
+import geometry.meshlab_processor
 import matplotlib.pyplot as plt
 import numpy
 import spline_fitting.subdivision as ss
@@ -529,9 +532,9 @@ if __name__ == '__main__':
     main_log.info("Post-processing starts.")
 
     # para_path = os.getcwd()+'/../Cases/Impeller/'
-    # para_path = os.getcwd()+'/../CantD/'
-    para_path = os.getcwd() + '/../HookValidation/'
-    sys.path.insert(0, para_path)
+    # para_path = os.getcwd()+'/../Cant3D/'
+    para_path = os.getcwd() + '/../Cant3D/'
+    sys.path.insert(1, para_path)
     import parameters
     ap = parameters.ap
     parsed_inp_file = utilities.abaqus.inp_reader_v2.parse_inp_file(ap['inp_path'])
@@ -541,61 +544,76 @@ if __name__ == '__main__':
     del parsed_inp_file
     del parts_list
 
-    ##------------ The boundary output is list of node instances
-    (inside_boundary, outside_boundary, original_outside_boundary, ext_plane) = \
-        geometry.boundary_extractor.get_all_boundary_nodes(ap,part)
+    if ap['model_space'] == '2D':
+        ##------------ The boundary output is list of node instances
+        (inside_boundary, outside_boundary, original_outside_boundary, ext_plane) = \
+            geometry.boundary_extractor.get_all_boundary_nodes(ap,part)
 
-    normal = ext_plane[1]
-    normal_abs = numpy.absolute(normal)
+        normal = ext_plane[1]
+        normal_abs = numpy.absolute(normal)
 
-    circles, f_out_bd_coords, outside_plot, original_outside_plot, inside_spl_clusters = make_plots()
+        circles, f_out_bd_coords, outside_plot, original_outside_plot, inside_spl_clusters = make_plots()
 
-    f_out_bd_coords_list = f_out_bd_coords.copy()
-    for i in range(len(f_out_bd_coords)):
-        if isinstance(f_out_bd_coords[i],numpy.ndarray):
-            f_out_bd_coords_list[i] = f_out_bd_coords[i].tolist()
-        elif isinstance(f_out_bd_coords[i],tuple):
-            f_out_bd_coords_list[i] = list(f_out_bd_coords[i])
-        else:
-            pass
+        f_out_bd_coords_list = f_out_bd_coords.copy()
+        for i in range(len(f_out_bd_coords)):
+            if isinstance(f_out_bd_coords[i],numpy.ndarray):
+                f_out_bd_coords_list[i] = f_out_bd_coords[i].tolist()
+            elif isinstance(f_out_bd_coords[i],tuple):
+                f_out_bd_coords_list[i] = list(f_out_bd_coords[i])
+            else:
+                pass
 
-    outside_plot_list = outside_plot.copy()
-    for i in range(len(outside_plot)):
-        if isinstance(outside_plot[i], numpy.ndarray):
-            outside_plot_list[i] = outside_plot[i].tolist()
-        elif isinstance(outside_plot[i], tuple):
-            outside_plot_list[i] = list(outside_plot[i])
-        else:
-            pass
+        outside_plot_list = outside_plot.copy()
+        for i in range(len(outside_plot)):
+            if isinstance(outside_plot[i], numpy.ndarray):
+                outside_plot_list[i] = outside_plot[i].tolist()
+            elif isinstance(outside_plot[i], tuple):
+                outside_plot_list[i] = list(outside_plot[i])
+            else:
+                pass
 
-    import json
+        import json
 
-    with open(ap['test_dir_path'] + 'boundary.txt', 'w') as file:
-        out_put = {"circles": circles, "ext_bd": outside_plot_list}
-        json.dump(out_put, file)
-        # json.dump(f_out_bd_coords_list,file)
-        file.close()
+        with open(ap['test_dir_path'] + 'boundary.txt', 'w') as file:
+            out_put = {"circles": circles, "ext_bd": outside_plot_list}
+            json.dump(out_put, file)
+            # json.dump(f_out_bd_coords_list,file)
+            file.close()
 
-    ext_keep_coords = original_outside_plot.copy()
-    for i in range(len(original_outside_plot)):
-        if isinstance(original_outside_plot[i], numpy.ndarray):
-            ext_keep_coords[i] = original_outside_plot[i].tolist()
-        elif isinstance(original_outside_plot[i], tuple):
-            ext_keep_coords[i] = list(original_outside_plot[i])
-        else:
-            pass
+        ext_keep_coords = original_outside_plot.copy()
+        for i in range(len(original_outside_plot)):
+            if isinstance(original_outside_plot[i], numpy.ndarray):
+                ext_keep_coords[i] = original_outside_plot[i].tolist()
+            elif isinstance(original_outside_plot[i], tuple):
+                ext_keep_coords[i] = list(original_outside_plot[i])
+            else:
+                pass
 
-    with open(ap['test_dir_path'] + 'smoothing.txt', 'w') as file:
-        out_put = {"circles": circles, "ext_bd": f_out_bd_coords_list, "ext_bd_keep": ext_keep_coords}
-        json.dump(out_put, file)
-        # json.dump(f_out_bd_coords_list,file)
-        file.close()
+        with open(ap['test_dir_path'] + 'smoothing.txt', 'w') as file:
+            out_put = {"circles": circles, "ext_bd": f_out_bd_coords_list, "ext_bd_keep": ext_keep_coords}
+            json.dump(out_put, file)
+            # json.dump(f_out_bd_coords_list,file)
+            file.close()
 
-    with open(ap['test_dir_path'] + 'both_spl.txt', 'w') as file:
-        out_put = {"inside_spl": inside_spl_clusters, "ext_bd": f_out_bd_coords_list, "ext_bd_keep": ext_keep_coords}
-        json.dump(out_put, file)
-        file.close()
+        with open(ap['test_dir_path'] + 'both_spl.txt', 'w') as file:
+            out_put = {"inside_spl": inside_spl_clusters, "ext_bd": f_out_bd_coords_list, "ext_bd_keep": ext_keep_coords}
+            json.dump(out_put, file)
+            file.close()
 
-    quit()
+        quit()
+    elif ap['model_space'] == '3D':
+        surf_nds, surf_nd_coords = geometry.surface_extractor.get_surface_nodes(ap,part)
+        with open(ap['test_dir_path']+'surface_nodes.txt','w') as f:
+            for idx in range(len(surf_nd_coords)):
+                f.write(str(surf_nd_coords[idx])+'\n')
+            f.close()
+        geometry.obj_processor.add_color(ap,surf_nd_coords)
+        geometry.meshlab_processor.mesh_smoothing(ap)
+
+
+
+    else:
+        raise Exception("Model space not found, check ap['model_space']")
+
 
 

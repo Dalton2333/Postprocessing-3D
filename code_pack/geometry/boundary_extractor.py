@@ -29,6 +29,7 @@ def get_keep_set(ap, part):
     keep_set = geometry.flat_geometry.get_set(keep_set_name, "nset", part)
     return keep_set.data
 
+
 def get_coords_average(list_of_coords):
     x = 0
     y = 0
@@ -171,7 +172,6 @@ def get_corrected_normal(normal, pattern, sample_elements_list, part):
     else:
         raise ValueError("The dot product of two normals should not be zero: ",normal, corrected_normal)
     return corrected_normal
-
 
 
 def get_cross_section_sample_elements(cross_section_set, part):
@@ -596,6 +596,7 @@ def item_in_cluster_neighbours(element_label, clusters):
             raise Exception("The neighbour list is not right: ",cluster[1][1])
     return in_cluster, cluster_no
 
+
 def node_on_cross_section_surface(node_to_check, normal, node_on_plane, part):
     node0 = part.nodes[node_on_plane].coordinates
     node_new = part.nodes[node_to_check].coordinates
@@ -611,6 +612,7 @@ def node_on_cross_section_surface(node_to_check, normal, node_on_plane, part):
         return True
     else:
         return False
+
 
 def add_void_elements(void_boundary_elements, part, void_elements, pattern, normal):
     element0 = void_boundary_elements[0]
@@ -766,9 +768,6 @@ def get_elements_clusters_v2(void_elements, part, ):
     return clusters
 
 
-
-
-
 def get_outside_boundary_elements(outside_boundary_nodes):
     outside_boundary_elements = []
     for node in outside_boundary_nodes.values():
@@ -804,6 +803,7 @@ def get_void_elements(part, cross_section_nodes, ext_plane):
                 void_boundary_elements.append(element.label)
     void_boundary_elements = list(set(void_boundary_elements))
     return void_boundary_elements
+
 
 def plot_polygon(poly):
     x,y = poly.exterior.xy
@@ -1073,13 +1073,6 @@ def adjust_outside_nodes(outside_boundary_nodes, original_outside_nodes):
     else:
         pass
     return new_out_bd_nodes, new_org_out_bd_nodes
-
-
-
-
-
-
-
 
 
 def get_all_boundary_nodes(ap, part):

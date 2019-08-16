@@ -5,13 +5,13 @@ This is the main control function for post processing
 '''
 import sys
 import os
-para_path = os.getcwd()+'/../'
-sys.path.insert(0, para_path)
-import parameters
-import utilities.logger
-import utilities.abaqus.inp_reader_v2
-import utilities.abaqus.inp_tree_processor_v2
-import geometry.boundary_extractor
+# para_path = os.getcwd()+'/../'
+# sys.path.insert(0, para_path)
+# import parameters
+# import utilities.logger
+# import utilities.abaqus.inp_reader_v2
+# import utilities.abaqus.inp_tree_processor_v2
+# import geometry.boundary_extractor
 import matplotlib.pyplot as plt
 
 def get_desired_part(parts_list,ap):
@@ -33,10 +33,16 @@ def scatter_plot(coords_list, plt_title):
     plt.show()
 
 if __name__ == '__main__':
-    list1 = [(13.0, 0.0), (12.0, 0.0), (11.0, 0.0), (10.0, 0.0), (9.0, 0.0), (8.0, 0.0), (7.0, 0.0), (6.0, 0.0), (5.0, 0.0), (4.0, 0.0), (3.0, 0.0), (2.0, 0.0), (1.0, 0.0)]
-    list1.append((136,212))
-    list1.sort()
-    print(list1)
+    lines = ["aaa","bbb","ccc"]
+    for idx in range(len(lines)):
+        line = lines[idx]
+        if line[0] == "a":
+            lines[idx] = line+"check"
+    print(lines)
+    # list1 = [(13.0, 0.0), (12.0, 0.0), (11.0, 0.0), (10.0, 0.0), (9.0, 0.0), (8.0, 0.0), (7.0, 0.0), (6.0, 0.0), (5.0, 0.0), (4.0, 0.0), (3.0, 0.0), (2.0, 0.0), (1.0, 0.0)]
+    # list1.append((136,212))
+    # list1.sort()
+    # print(list1)
     # main_log = utilities.logger.main_log
     # main_log.info("Post-processing starts.")
     # ap = parameters.ap
