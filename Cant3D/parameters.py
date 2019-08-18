@@ -4,7 +4,7 @@ import numpy
 dir_path = os.path.dirname(os.path.realpath(__file__))
 #dir_path = os.getcwd()
 test_dir_path = dir_path+'/'
-code_dir_path = test_dir_path + 'code_pack/'
+code_dir_path = test_dir_path + '../code_pack/'
 
 # ------------Following are parameters for Impeller-------------
 inp_name = 'Cant1-13'
